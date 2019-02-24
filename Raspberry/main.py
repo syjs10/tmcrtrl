@@ -12,10 +12,10 @@ for i in range(6):
         arr.append(line)
     tmp  = arr[1].split("t=")[1].strip()
     tmp  = "{:.3f}".format(int(tmp) / 1000)
-    data = json.dumps({'tmp': tmp, 'time': time.time()})
+    data = json.dumps({'tmp': tmp, 'time': int(time.time())})
     f.close()
-    channel.queue_declare(queue='hello')
-    channel.basic_publish(exchange='', routing_key='hello', body=data)
+    channel.queue_declare(queue='tmpdata')
+    channel.basic_publish(exchange='', routing_key='tmpdata', body=data)
     time.sleep(10)
 
 connection.close()
