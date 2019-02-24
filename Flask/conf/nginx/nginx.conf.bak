@@ -7,8 +7,8 @@ server {
     location / { try_files $uri @tmpctrl; }
     location @tmpctrl {
         include uwsgi_params;
-        #uwsgi_param SCRIPT_NAME /tmpctrl;
-        uwsgi_modifier1 30;
-        uwsgi_pass unix:/home/syjs10/tmpctrl/Flask/tmpctrl_uwsgi.sock;
+        uwsgi_pass 127.0.0.1:7000;
+        #uwsgi_param SCRIPT_NAME /tmpctrl
+        uwsgi_param UWSGI_CHDIR /home/syjs10/tmpctrl/Flask/;
     }
 }
