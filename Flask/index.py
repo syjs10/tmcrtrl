@@ -1,10 +1,12 @@
-from flask import Flask, url_for, request
+from flask import Flask, url_for, request, make_response
 app = Flask(__name__)
 import lib.database
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     datas = lib.database.getData()
-    return datas
+    rst = make_response(datas)
+    rst.headers['Access-Control-Allow-Origin'] = '*'
+    return rst
 @app.route('/get/<tmp>')
 def gettmp(tmp):
     datas = lib.database.getNewData()

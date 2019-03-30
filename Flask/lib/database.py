@@ -20,7 +20,8 @@ def insertData(data):
 def getData():
     dataList = []
     my_set = db.tmprecode
-    for data in my_set.find({},{'_id': 0}):
+    for data in my_set.find({},{'_id': 0}).sort('time', -1).limit(10):
+        data['tmp'] =float(data['tmp'])
         dataList.append(data)
     return json.dumps(dataList)
 # def insertData(school, dataList):

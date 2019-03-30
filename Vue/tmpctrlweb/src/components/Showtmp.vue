@@ -1,17 +1,18 @@
 <template>
   <div class="charts" id="myChart" >
-    <x-chart :data="this.data"></x-chart>
+    <x-chart :tmpData="this.data.tmpData"></x-chart>
   </div>
 </template>
 
 <script>
 import XChart from "./chart.vue";
 import Vue from 'vue';
-// import testdata from "../testdata.js";
+import tpldata from "../testdata.js";
 import axios from 'axios';
 export default {
   name: "Showtmp",
   data() {
+
       return {
           data:{},
       };
@@ -22,9 +23,13 @@ export default {
   components: {
     XChart,
   },
-  mounted: function() {
+  created() {
     this.$nextTick(function () {
-      setInterval(this.getTmpData(), 1000);
+      setInterval(
+          () => {
+            this.getTmpData();
+          }, 1000
+      );
     })
   },
   methods: {
@@ -34,7 +39,6 @@ export default {
         url: 'http://localhost:5000',
       })
       .then((response) => {
-        console.log(response.data);
         var times = [];
         var tmps = [];
         response.data.forEach(function (one) {
@@ -42,42 +46,11 @@ export default {
             times.push(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
             tmps.push(one.tmp);
         });
-        console.log(times);
-        console.log(tmps);
-
-        var bar = {
-            chart: {
-                type: 'line'
-            },
-            title: {
-                text: 'Monthly Average Temperature'
-            },
-            subtitle: {
-                text: 'Source: WorldClimate.com'
-            },
-            xAxis: {
-                categories: times
-            },
-            yAxis: {
-                title: {
-                    text: 'Temperature (°C)'
-                }
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true
-                    },
-                    enableMouseTracking: false
-                }
-            },
-            series: [{
-                name: '室内温度',
-                data: tmps
-            }]
-        };
-        this.$set(this.data, 'bar', bar);
-
+        tpldata['series'] = [{
+            name: '室内温度',
+            data: tmps
+        }];
+        this.$set(this.data, 'tmpData', tpldata);
       });
 
     }
