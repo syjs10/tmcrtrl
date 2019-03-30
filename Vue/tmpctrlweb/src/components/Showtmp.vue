@@ -1,20 +1,20 @@
 <template>
   <div class="charts" id="myChart" >
-    <x-chart :tmpData="this.data.tmpData"></x-chart>
+    <x-chart :tmpData="this.data.tmpData" :tmps="this.data.tmps"></x-chart>
   </div>
 </template>
 
 <script>
 import XChart from "./chart.vue";
-import Vue from 'vue';
+// import Vue from 'vue';
 import tpldata from "../testdata.js";
 import axios from 'axios';
 export default {
   name: "Showtmp",
   data() {
-
       return {
-          data:{},
+          data: {},
+          isRouterAlive: true,
       };
   },
   props: {
@@ -24,11 +24,12 @@ export default {
     XChart,
   },
   created() {
+    this.getTmpData();
     this.$nextTick(function () {
       setInterval(
           () => {
             this.getTmpData();
-          }, 1000
+          }, 5000
       );
     })
   },
@@ -51,8 +52,8 @@ export default {
             data: tmps
         }];
         this.$set(this.data, 'tmpData', tpldata);
+        this.$set(this.data, 'tmps', tmps);
       });
-
     }
   }
 };
